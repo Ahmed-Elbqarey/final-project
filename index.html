@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="simple cashier and products management wep app"
+    />
+    <title>نظام ادارة المنتجات</title>
+    <link rel="icon" href="images/cashier.ico" />
+    <link rel="stylesheet" href="style/all.min.css" />
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="style/style.css" />
+  </head>
+  <body>
+    <div id="animation" class="d-none">
+      <div class="lds-ripple">
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+    <div
+      class="container text-center row m-auto d-flex"
+      style="direction: ltr; min-height: 100vh"
+      id="loginPage"
+    >
+      <div class="col-xl-4">
+        <input
+          class="form-control"
+          type="text"
+          placeholder="UserName"
+          id="username"
+          autocomplete="off"
+          autofocus
+        />
+        <input
+          class="form-control"
+          type="password"
+          placeholder="password"
+          id="password"
+          autocomplete="off"
+        />
+        <button
+          class="btn btn-outline-success col-4 m-2 fw-bold"
+          id="login"
+          onclick="login()"
+        >
+          LOGIN
+        </button>
+      </div>
+    </div>
+    <div class="container d-none col-sm-12" id="productPage">
+      <button
+        class="btn btn-outline-success m-2 fw-bold"
+        style="float: left; width: fit-content"
+        onclick="logout()"
+      >
+        LOG OUT
+      </button>
+      <button
+        id="shiftBtn"
+        class="btn btn-outline-primary m-2 d-none"
+        style="float: left; width: fit-content"
+      >
+        Shift Info
+      </button>
+      <div class="admin">
+        <img src="images/user.png" alt="user" style="width: 40px" /> <br />
+        <p
+          class="text-danger d-inline"
+          id="gust"
+          style="text-transform: uppercase; font-weight: bold"
+        ></p>
+        <p class="text-success d-inline" style="font-weight: 500">
+          Shift Start At
+        </p>
+        <br />
+        <p class="text-danger d-inline" id="shiftDate"></p>
+        <p class="text-danger" id="shiftTime"></p>
+      </div>
+      <div id="inputs" class="col-md-12">
+        <input
+          class="form-control"
+          type="text"
+          id="title"
+          placeholder="اسم المنتج"
+        />
+        <div class="price">
+          <input
+            class="form-control"
+            onkeyup="getTotal();"
+            type="number"
+            id="price"
+            placeholder="السعر"
+          />
+          <input
+            class="form-control"
+            onkeyup="getTotal();"
+            type="number"
+            id="taxes"
+            placeholder="الضرائب"
+          />
+          <input
+            class="form-control"
+            onkeyup="getTotal();"
+            type="number"
+            id="ads"
+            placeholder="الاعلانات"
+          />
+          <input
+            class="form-control"
+            onkeyup="getTotal();"
+            type="number"
+            id="discount"
+            placeholder="الخصم"
+          />
+          <small class="bg-danger text-light" id="total"></small>
+        </div>
+        <input
+          class="form-control"
+          type="text"
+          id="category"
+          placeholder="الفئه"
+        />
+        <input
+          class="form-control"
+          type="number"
+          id="quantity"
+          placeholder="الكميه"
+        />
+        <button id="submit" class="btn btn-success">انشاء</button>
+      </div>
+      <div id="outputs" class="col-md-12">
+        <div class="search">
+          <input
+            class="form-control"
+            type="text"
+            id="search"
+            onkeyup="searchData(this.value.toLowerCase())"
+            placeholder="بحث"
+          />
+        </div>
+        <div id="reset-value" class="d-block"></div>
+        <table class="table table-hover table-dark table-bordered m-2">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">اسم المنتج</th>
+              <th scope="col">السعر</th>
+              <th scope="col">الضرائب</th>
+              <th scope="col">الاعلانات</th>
+              <th scope="col">الخصم</th>
+              <th scope="col">الفئه</th>
+              <th scope="col">الكميه</th>
+              <th class="" id="tabUpd" scope="col">تحديث</th>
+              <th class="" id="tabDEl" scope="col">حذف</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+        <div id="myDiv" class="d-none">
+          <table
+            class="table table-hover table-dark table-bordered m-2"
+            id="printtable"
+          >
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">اسم المنتج</th>
+                <th scope="col">السعر</th>
+                <th class="" id="tabDEl" scope="col">حذف</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+            <tfoot id="tableFooter"></tfoot>
+          </table>
+        </div>
+        <button
+          class="btn btn-success d-none"
+          id="buyBtn"
+          onclick="printBill()"
+        >
+          شراء
+        </button>
+      </div>
+      <i class="fa-solid fa-angles-up" id="top"></i>
+    </div>
+    <div id="shiftInfo" class="d-none" dir="ltr">
+      <i class="fa-regular fa-circle-xmark" id="exit"></i>
+      <table class="table table-dark table-hover text-center">
+        <thead id="shiftTable">
+          <tr>
+            <th>User Name</th>
+            <th>Shift Start At</th>
+            <th>Shift End At</th>
+            <th>Total Sales</th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
+    <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="js/sweetalert2_11.7.10_sweetalert2.all.min.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
